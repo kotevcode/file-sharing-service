@@ -1,0 +1,126 @@
+import { useState, useCallback } from 'react';
+import { Card, Text, Group, Button, NumberInput, Modal } from '@mantine/core';
+import { useDropzone } from 'react-dropzone';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+
+interface UploadResponse {
+  fileUrl: string;
+}
+
+export function FileUpload() {
+  const [file, setFile] = useState<File | null>(null);
+  const [expiresAt, setExpiredAt] = useState(60);
+  const [shareableUrl, setShareableUrl] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const uploadMutation = useMutation({
+    mutationFn: async () => {
+      if (!file) throw new Error('No file selected');
+      
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('expiresAt', expiresAt.toString());
+      
+      const response = await axios.put<UploadResponse>(
+        `${import.meta.env.VITE_API_URL}/v1/file`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setShareableUrl(data.fileUrl);
+      setIsModalOpen(true);
+    },
+    onError: (error) => {
+      console.error('Error uploading file:', error);
+    },
+  });
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setFile(acceptedFiles[0]);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
+    },
+    maxFiles: 1,
+  });
+
+  const handleSubmit = () => {
+    uploadMutation.mutate();
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareableUrl);
+  };
+
+  return (
+    <>
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <div
+          {...getRootProps()}
+          style={{
+            border: '2px dashed #ccc',
+            borderRadius: '4px',
+            padding: '20px',
+            textAlign: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <Text>Drop the image here...</Text>
+          ) : (
+            <Text>Drag and drop an image here, or click to select</Text>
+          )}
+        </div>
+
+        {file && (
+          <Text size="sm" mt="md">
+            Selected file: {file.name}
+          </Text>
+        )}
+
+        <NumberInput
+          label="Retention time (minutes)"
+          value={expiresAt}
+          onChange={(val) => setExpiredAt(Number(val) || 60)}
+          min={1}
+          max={3000}
+          mt="md"
+        />
+
+        <Group justify="center" mt="md">
+          <Button
+            onClick={handleSubmit}
+            loading={uploadMutation.isPending}
+            disabled={!file}
+          >
+            Upload File
+          </Button>
+        </Group>
+      </Card>
+
+      <Modal
+        opened={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="File Uploaded Successfully!"
+      >
+        <Text>Your file is available at:</Text>
+        <Text fw={500} mt="xs">{shareableUrl}</Text>
+        <Button onClick={copyToClipboard} mt="md" fullWidth>
+          Copy URL to Clipboard
+        </Button>
+      </Modal>
+    </>
+  );
+}

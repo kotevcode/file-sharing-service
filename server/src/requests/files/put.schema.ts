@@ -2,7 +2,7 @@ import { JSONSchemaType } from "ajv";
 
 interface FilesPutSchema {
   body: {
-    expiredAt: string;
+    expiresAt: string;
   };
 }
 
@@ -12,9 +12,9 @@ const filesPutReqSchema: JSONSchemaType<FilesPutSchema> = {
     body: {
       type: 'object',
       properties: {
-        expiredAt: { type: 'string', format: 'date-time' },
+        expiresAt: { type: 'string' },
       },
-      required: ['expiredAt'],
+      required: ['expiresAt'],
     },
   },
   required: ['body'],

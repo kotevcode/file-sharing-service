@@ -1,0 +1,21 @@
+{
+  "name": "file-sharing-app",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:client": "cd client && yarn dev",
+    "dev:server": "cd server && yarn dev",
+    "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\"",
+    "build": "yarn build --workspace=client && yarn build --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Shahaf Antwarg <santwarg@gmail.com>",
+  "license": "MIT"
+}

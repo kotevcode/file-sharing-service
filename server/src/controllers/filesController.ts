@@ -4,8 +4,9 @@ import { Readable } from 'stream';
 import { v4 as uuidv4 } from 'uuid';
 import AWS from 'aws-sdk';
 import File from '@/models/file';
+import awsConfig from '@/configs/aws';
 
-const s3 = new AWS.S3({ region: process.env.AWS_REGION });
+const s3 = new AWS.S3({ region: awsConfig.region as string });
 
 export default class FilesController {
   // create a file
@@ -17,7 +18,7 @@ export default class FilesController {
       throw new Error('No file uploaded');
     }
 
-    if (!process.env.AWS_S3_BUCKET) {
+    if (!awsConfig.s3Bucket) {
       throw new Error('AWS_S3_BUCKET environment variable is not set');
     }
 
@@ -28,7 +29,7 @@ export default class FilesController {
 
     // Upload file to S3
     const s3Params: AWS.S3.PutObjectRequest = {
-      Bucket: process.env.S3_BUCKET as string,
+      Bucket: awsConfig.s3Bucket as string,
       Key: fileKey,
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
@@ -62,7 +63,7 @@ export default class FilesController {
     
     // Prepare S3 parameters
     const s3Params: AWS.S3.GetObjectRequest = {
-      Bucket: process.env.S3_BUCKET as string,
+      Bucket: awsConfig.s3Bucket as string,
       Key: file.s3Key,
     };
 
