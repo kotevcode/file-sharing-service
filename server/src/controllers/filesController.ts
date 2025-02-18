@@ -34,13 +34,14 @@ export default class FilesController {
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
     };
-    await s3.upload(s3Params).promise();
+    const s3UploadResult = await s3.upload(s3Params).promise();
+    console.log('s3UploadResult', s3UploadResult);
 
     // Save file metadata using Sequelize
     await File.create({
       id: fileId,
       s3Key: fileKey,
-      expiresAt,
+      expiresAt: new Date(Date.now() + expiresAt * 60 * 1000),
     });
 
     // Construct the shareable URL (assumes the server's host is in req.headers.host)
