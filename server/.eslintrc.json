@@ -1,0 +1,41 @@
+{
+    "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base"
+    ],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "rules": {
+        "no-console": "off",
+        "no-unused-vars": "warn",
+        "comma-dangle": "off",
+        "no-param-reassign": "warn",
+        "no-undef": "warn",
+        "no-underscore-dangle": "off",
+        "max-len": [
+            "error",
+            120
+        ],
+        "key-spacing": [
+            2,
+            {
+                "align": "colon"
+            }
+        ],
+        "linebreak-style": "off",
+        "import/prefer-default-export": "off",
+        "class-methods-use-this": "off",
+        "no-restricted-syntax":"off",
+        "consistent-return": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "": "never",
+              "js": "never",
+              "ts": "never"
+            }
+        ]
+    }
+}
