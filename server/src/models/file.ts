@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 
-export default class Bool extends Model {
+export default class File extends Model {
   id!: string;
   createdAt!: Date;
   s3Key!: string;
