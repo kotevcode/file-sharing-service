@@ -24,7 +24,7 @@ module.exports = {
       }
     });
     // add indexes
-    await queryInterface.addIndex('files', ['createdAt']);
+    await queryInterface.addIndex('files', ['expiresAt']);
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('files');
