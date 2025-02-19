@@ -8,9 +8,10 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "watch": "yarn build -w",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "cleanup": "node dist/jobs/cleanup.js"
   },
   "_moduleAliases": {
     "@": "src"
@@ -50,6 +51,7 @@
     "nodemon": "^3.1.9",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.7.3"
   }
 }
