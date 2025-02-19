@@ -1,9 +1,9 @@
 {
-  "name": "cyolo-task",
+  "name": "file-sharing-service",
   "version": "1.0.0",
   "description": "file sharing service",
   "main": "dist/server.js",
-  "repository": "http://github.com/kotevcode/cyolo-task",
+  "repository": "http://github.com/kotevcode/file-sharing-service",
   "author": "Shahaf Antwarg <santwarg@gmail.com>",
   "license": "MIT",
   "scripts": {
