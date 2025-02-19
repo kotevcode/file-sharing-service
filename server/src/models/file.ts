@@ -5,6 +5,7 @@ export default class File extends Model {
   createdAt!: Date;
   s3Key!: string;
   expiresAt!: Date;
+  deleted!: boolean;
 
   static DataTypes = {
     id: {
@@ -23,6 +24,11 @@ export default class File extends Model {
     },
     expiresAt: {
       type: DataTypes.DATE,
+    },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   };
 
