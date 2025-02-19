@@ -3,7 +3,7 @@ import { Card, Text, Group, Button, NumberInput, Modal } from '@mantine/core';
 import { useDropzone } from 'react-dropzone';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-
+import styles from '../styles/app.module.scss';
 interface UploadResponse {
   fileUrl: string;
 }
@@ -68,13 +68,7 @@ export function FileUpload() {
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <div
           {...getRootProps()}
-          style={{
-            border: '2px dashed #ccc',
-            borderRadius: '4px',
-            padding: '20px',
-            textAlign: 'center',
-            cursor: 'pointer',
-          }}
+          className={styles.dropzone}
         >
           <input {...getInputProps()} />
           {isDragActive ? (
