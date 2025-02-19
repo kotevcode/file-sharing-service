@@ -11,10 +11,26 @@
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "watch": "yarn build -w",
     "dev": "nodemon",
-    "cleanup": "node dist/jobs/cleanup.js"
+    "cleanup": "node dist/jobs/runner.js cleanup",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "_moduleAliases": {
     "@": "src"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/test/setup.ts"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.ts"
+    ]
   },
   "dependencies": {
     "ajv": "^8.17.1",

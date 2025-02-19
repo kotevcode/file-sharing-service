@@ -1,8 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import AWS from 'aws-sdk';
 import { Op } from 'sequelize';
-import { sequelize } from '@/models';
 import File from '@/models/file';
 import awsConfig from '@/configs/aws';
 
@@ -13,9 +10,7 @@ const s3 = new AWS.S3({ region: awsConfig.region as string });
  * - Query for files where expiresAt is in the past and that are not already marked as deleted.
  * - For each expired file, delete the file from S3, then mark the file as deleted in the database.
  */
-export async function cleanupExpiredFiles(): Promise<void> {
-  await sequelize.authenticate();
-  
+export default async function cleanupExpiredFiles(): Promise<void> {
   const now = new Date();
   const expiredFiles = await File.findAll({
     where: { 
@@ -42,12 +37,3 @@ export async function cleanupExpiredFiles(): Promise<void> {
   }
 }
 
-(async () => {
-  try {
-    await cleanupExpiredFiles();
-    process.exit(0);
-  } catch (error) {
-    console.error('Error during cleanup:', error);
-    process.exit(1);
-  }
-})();
