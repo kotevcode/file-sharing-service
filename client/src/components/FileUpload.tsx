@@ -14,6 +14,7 @@ export function FileUpload() {
   const [expiresAt, setExpiredAt] = useState(1);
   const [shareableUrl, setShareableUrl] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   const uploadMutation = useMutation({
     mutationFn: async () => {
@@ -60,8 +61,15 @@ export function FileUpload() {
     uploadMutation.mutate();
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareableUrl);
+  const copyToClipboard = async () => {
+    navigator.clipboard.writeText(shareableUrl).then(() => {
+      setCopySuccess(true);
+      setTimeout(() => {
+        setCopySuccess(false);
+      }, 2000);
+    }).catch((err) => {
+      console.error('Failed to copy text: ', err);
+    });
   };
 
   return (
@@ -111,9 +119,11 @@ export function FileUpload() {
         title="File Uploaded Successfully!"
       >
         <Text>Your file is available at:</Text>
-        <Text fw={500} mt="xs">{shareableUrl}</Text>
+        <Text fw={500} mt="xs">
+            <a href={shareableUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>{shareableUrl}</a>
+        </Text>
         <Button onClick={copyToClipboard} mt="md" fullWidth>
-          Copy URL to Clipboard
+          {copySuccess ? 'Copied!' : 'Copy URL to Clipboard'}
         </Button>
       </Modal>
     </>
