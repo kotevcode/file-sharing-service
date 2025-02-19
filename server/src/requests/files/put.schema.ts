@@ -1,23 +1,23 @@
 import { JSONSchemaType } from "ajv";
 
 interface FilesPutSchema {
-  body: {
-    expiresAt: string;
+  headers: {
+    'x-retention-time': string;
   };
 }
 
 const filesPutReqSchema: JSONSchemaType<FilesPutSchema> = {
   type: 'object',
   properties: {
-    body: {
+    headers: {
       type: 'object',
       properties: {
-        expiresAt: { type: 'string' },
+        'x-retention-time': { type: 'string' },
       },
-      required: ['expiresAt'],
+      required: ['x-retention-time'],
     },
   },
-  required: ['body'],
+  required: ['headers'],
   additionalProperties: false,
 };
 

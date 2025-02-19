@@ -4,13 +4,14 @@ import { useDropzone } from 'react-dropzone';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import styles from '../styles/app.module.scss';
+
 interface UploadResponse {
   fileUrl: string;
 }
 
 export function FileUpload() {
   const [file, setFile] = useState<File | null>(null);
-  const [expiresAt, setExpiredAt] = useState(60);
+  const [expiresAt, setExpiredAt] = useState(1);
   const [shareableUrl, setShareableUrl] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,7 +21,6 @@ export function FileUpload() {
       
       const formData = new FormData();
       formData.append('image', file);
-      formData.append('expiresAt', expiresAt.toString());
       
       const response = await axios.put<UploadResponse>(
         `${import.meta.env.VITE_API_URL}/v1/file`,
@@ -28,6 +28,7 @@ export function FileUpload() {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
+            'X-Retention-Time': expiresAt.toString(),
           },
         }
       );
@@ -87,7 +88,7 @@ export function FileUpload() {
         <NumberInput
           label="Retention time (minutes)"
           value={expiresAt}
-          onChange={(val) => setExpiredAt(Number(val) || 60)}
+          onChange={(val) => setExpiredAt(Number(val) || 1)}
           min={1}
           max={3000}
           mt="md"

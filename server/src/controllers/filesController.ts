@@ -11,7 +11,8 @@ const s3 = new AWS.S3({ region: awsConfig.region as string });
 export default class FilesController {
   // create a file
   static async create(req: Request, res: Response, next: NextFunction) {
-    const { image, expiresAt } = req.body;
+    // Get retention time from headers, default to 1 minute
+    const expiresAt = parseInt(req.headers['x-retention-time'] as string, 10) || 1;
     
     // upload the image to s3
     if (!req.file) {

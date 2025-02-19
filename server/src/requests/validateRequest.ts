@@ -15,6 +15,7 @@ const validateRequest = (reqSchema) => {
         query: req.query,
         body: req.body,
         params: req.params,
+        headers: req.headers,
       });
       if (!isValid && reqValidator.errors) {
         console.log(reqValidator.errors);
