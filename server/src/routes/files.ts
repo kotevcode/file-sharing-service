@@ -4,6 +4,8 @@ import validateRequest from '@/requests/validateRequest';
 import FilesController from '@/controllers/filesController';
 import filesGetReqSchema from '@/requests/files/get.schema';
 import filesPutReqSchema from '@/requests/files/put.schema';
+import validateImageFile from '@/middlewares/validateImageFile';
+
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -12,6 +14,7 @@ const router = express.Router();
 
 router.route('/file')
   .put(upload.single('image'), [
+    validateImageFile,
     validateRequest(filesPutReqSchema),
     FilesController.create,
   ]);
